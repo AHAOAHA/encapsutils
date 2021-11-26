@@ -1,15 +1,18 @@
-language: golang
+language: go
+go: 1.17.x
 
-golang: 1.17
+git:
+  submodules: false
 
 sudo: false
 
-before_install: true
+before_install:
+  - echo "do nothing"
 
 install: true
 
 script:
-  - go test ./... -coverprofile=coverage.txt -covermode=atomic
+  - go test ./... -coverprofile=.coverage.txt -covermode=atomic
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
