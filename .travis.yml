@@ -12,6 +12,7 @@ before_install:
 install: true
 
 script:
+  - go mod tidy
   - go test ./... -coverprofile=.coverage.txt -covermode=atomic
 
 after_success:
