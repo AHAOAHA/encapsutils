@@ -2,7 +2,7 @@
  * @brief 文件操作
  */
 
-package utils
+package encapsutils
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package utils
+package encapsutils
 
 import (
 	"io/ioutil"

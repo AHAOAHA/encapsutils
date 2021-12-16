@@ -2,7 +2,7 @@
  * @berief 扩展Golang flag包
  */
 
-package utils
+package encapsutils
 
 import "fmt"
 
