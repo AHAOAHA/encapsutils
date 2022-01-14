@@ -7,13 +7,13 @@ git:
 sudo: false
 
 before_install:
-  - echo "do nothing"
+  - COVERAGE_REPORT=.coverage.txt
 
 install: true
 
 script:
   - go mod tidy
-  - go test ./... -coverprofile=.coverage.txt -covermode=atomic
+  - go test ./... -coverprofile=${COVERAGE_REPORT} -covermode=atomic
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -f ${COVERAGE_REPORT}
