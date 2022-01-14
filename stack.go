@@ -4,6 +4,7 @@ import (
 	"sync"
 )
 
+// Stack stack interface.
 type Stack interface {
 	Push(v interface{}) bool
 	Top() interface{}
@@ -17,6 +18,7 @@ type stack struct {
 	bus []interface{}
 }
 
+// NewStack create new stack.
 func NewStack() Stack {
 	return &stack{
 		mtx: &sync.RWMutex{},

@@ -4,6 +4,7 @@ import (
 	"sync"
 )
 
+// Queue queue interface.
 type Queue interface {
 	Push(v interface{}) bool
 	Pop() interface{}
@@ -18,6 +19,7 @@ type queue struct {
 	bus []interface{}
 }
 
+// NewQueue create a new queue.
 func NewQueue() Queue {
 	return &queue{
 		mtx: &sync.RWMutex{},

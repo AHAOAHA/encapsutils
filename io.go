@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 )
 
+// PathExists probe path is exist.
 func PathExists(path string) bool {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -22,6 +23,7 @@ func PathExists(path string) bool {
 	return false
 }
 
+// IsDir probe path is dir.
 func IsDir(path string) bool {
 	if PathExists(path) {
 		s, err := os.Stat(path)
@@ -34,6 +36,7 @@ func IsDir(path string) bool {
 	return false
 }
 
+// IsFile probe path is file.
 func IsFile(path string) bool {
 	if PathExists(path) {
 		s, err := os.Stat(path)
@@ -46,6 +49,7 @@ func IsFile(path string) bool {
 	return false
 }
 
+// CreateDirIfNotExists create path is not exist.
 func CreateDirIfNotExists(path string, perm os.FileMode) error {
 	if !PathExists(path) {
 		return os.MkdirAll(path, perm)
@@ -53,6 +57,7 @@ func CreateDirIfNotExists(path string, perm os.FileMode) error {
 	return nil
 }
 
+// MustSaveToFile if path file not exist, first create it and write binary to file.
 func MustSaveToFile(binary []byte, path string) error {
 	abs, err := filepath.Abs(path)
 	if err != nil {
@@ -72,6 +77,7 @@ func MustSaveToFile(binary []byte, path string) error {
 	return ioutil.WriteFile(abs, binary, 0666)
 }
 
+// MustAppendToFile if path file not exist, first create it and append write binary to file.
 func MustAppendToFile(binary []byte, path string) error {
 	if !IsFile(path) {
 		return MustSaveToFile(binary, path)
