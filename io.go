@@ -77,6 +77,33 @@ func MustSaveToFile(binary []byte, path string) error {
 	return ioutil.WriteFile(abs, binary, 0666)
 }
 
+// MustCreateFile create a file if it not exist.
+func MustCreateFile(path string) error {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
+	if IsFile(abs) {
+		return nil
+	}
+
+	if IsDir(abs) {
+		return fmt.Errorf("%s is dir", abs)
+	}
+
+	if err = CreateDirIfNotExists(filepath.Dir(abs), os.ModePerm); err != nil {
+		return err
+	}
+
+	var f *os.File
+	f, err = os.Create(abs)
+	if err != nil {
+		return err
+	}
+	return f.Close()
+}
+
 // MustAppendToFile if path file not exist, first create it and append write binary to file.
 func MustAppendToFile(binary []byte, path string) error {
 	if !IsFile(path) {
