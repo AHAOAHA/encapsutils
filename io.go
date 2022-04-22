@@ -17,10 +17,7 @@ func PathExists(path string) bool {
 	if err == nil {
 		return true
 	}
-	if os.IsNotExist(err) {
-		return false
-	}
-	return false
+	return !os.IsNotExist(err)
 }
 
 // IsDir probe path is dir.
@@ -49,14 +46,6 @@ func IsFile(path string) bool {
 	return false
 }
 
-// CreateDirIfNotExists create path is not exist.
-func CreateDirIfNotExists(path string, perm os.FileMode) error {
-	if !PathExists(path) {
-		return os.MkdirAll(path, perm)
-	}
-	return nil
-}
-
 // MustSaveToFile if path file not exist, first create it and write binary to file.
 func MustSaveToFile(binary []byte, path string) error {
 	abs, err := filepath.Abs(path)
@@ -64,17 +53,26 @@ func MustSaveToFile(binary []byte, path string) error {
 		return err
 	}
 
-	if PathExists(abs) {
-		if IsDir(abs) {
-			return fmt.Errorf("path [%s] already exists and it's Dir", abs)
-		}
+	if IsDir(abs) {
+		return fmt.Errorf("path [%s] already exists and it's Dir", abs)
 	}
 
-	if err := CreateDirIfNotExists(filepath.Dir(abs), os.ModePerm); err != nil {
+	if err := MustCreateDir(filepath.Dir(abs), os.ModePerm); err != nil {
 		return err
 	}
 
 	return ioutil.WriteFile(abs, binary, 0666)
+}
+
+// MustCreateDir create path is not exist,
+func MustCreateDir(path string, perm os.FileMode) error {
+	if !PathExists(path) {
+		return os.MkdirAll(path, perm)
+	}
+	if !IsDir(path) {
+		return fmt.Errorf("path is already occupied by a file")
+	}
+	return nil
 }
 
 // MustCreateFile create a file if it not exist.
@@ -92,7 +90,7 @@ func MustCreateFile(path string) error {
 		return fmt.Errorf("%s is dir", abs)
 	}
 
-	if err = CreateDirIfNotExists(filepath.Dir(abs), os.ModePerm); err != nil {
+	if err = MustCreateDir(filepath.Dir(abs), os.ModePerm); err != nil {
 		return err
 	}
 

@@ -33,8 +33,8 @@ func TestIsDirAndIsFile(t *testing.T) {
 
 func TestCreateDirIfNotExist(t *testing.T) {
 	convey.Convey("create dir if not exist", t, func() {
-		convey.So(CreateDirIfNotExists("/", os.ModePerm), convey.ShouldBeNil)
-		convey.So(CreateDirIfNotExists("./.ahaoaha", os.ModePerm), convey.ShouldBeNil)
+		convey.So(MustCreateDir("/", os.ModePerm), convey.ShouldBeNil)
+		convey.So(MustCreateDir("./.ahaoaha", os.ModePerm), convey.ShouldBeNil)
 	})
 }
 
